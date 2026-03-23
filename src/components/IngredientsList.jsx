@@ -14,7 +14,7 @@ export default function IngredientsList(props) {
       }
       {props.ingredients.length >= 5 && (
         <section className='get-recipe'>
-          <div>
+          <div ref={props.ref}>
             <h3>Ready for a recipe?
             </h3>
             <p>Get a recipe from your list of ingredients!</p>

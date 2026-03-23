@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
 import './styles/ChefClaudeApp.css';
@@ -10,10 +10,17 @@ import SuggestedRecipe from './components/SuggestedRecipe';
 import { getRecipeFromDeepseek } from './service/ai';
 
 export default function ChefClaudeApp() {
-  const [ingredients, setIngredients] = React.useState([]);
-  const [recipe, setRecipe] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [ingredients, setIngredients] = useState([]);
+  const [recipe, setRecipe] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const recipeSection = useRef(null);
 
+  useEffect(() => {
+    if (recipeSection.current !== null && recipe !== "") {
+      recipeSection.current.scrollIntoView({behavior: "smooth"});
+    }
+  }, [recipe])
+ 
   const getRecipe = () => {
     setIsLoading(true);
     getRecipeFromDeepseek(ingredients).then((recipe) => {
@@ -31,7 +38,7 @@ export default function ChefClaudeApp() {
           ingredients={ingredients}
           setIngredients={setIngredients}
         />
-        <IngredientsList ingredients={ingredients} getRecipe={getRecipe} />
+        <IngredientsList ref={recipeSection} ingredients={ingredients} getRecipe={getRecipe} />
         <RotatingLines
           visible={isLoading}
           height="96"
